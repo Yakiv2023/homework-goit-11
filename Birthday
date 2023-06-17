@@ -1,0 +1,98 @@
+import datetime
+
+
+class Field:
+    def __init__(self):
+        self._value = None
+
+    @property
+    def value(self):
+        return self._value
+
+    @value.setter
+    def value(self, new_value):
+        self.validate(new_value)
+        self._value = new_value
+
+    def validate(self, value):
+        pass
+
+
+class Phone(Field):
+    def validate(self, value):
+        # Перевірка на коректність веденого номера телефону
+        pass
+
+
+class Birthday(Field):
+    def validate(self, value):
+        # Перевірка на коректність веденого дня народження
+        pass
+
+
+class Record:
+    def __init__(self, name, phone, birthday=None):
+        self.name = name
+        self.phone = phone
+        self.birthday = birthday
+
+    def days_to_birthday(self):
+        if not self.birthday:
+            return None
+
+        today = datetime.date.today()
+        next_birthday = datetime.date(today.year, self.birthday.month, self.birthday.day)
+
+        if next_birthday < today:
+            next_birthday = datetime.date(today.year + 1, self.birthday.month, self.birthday.day)
+
+        days_until_birthday = (next_birthday - today).days
+
+        return days_until_birthday
+
+
+class AddressBook:
+    def __init__(self):
+        self.records = []
+
+    def add_record(self, record):
+        self.records.append(record)
+
+    def validate_phone(self, phone):
+        # Перевірка на коректність формату номера телефону
+        pass
+
+    def validate_birthday(self, birthday):
+        # Перевірка на коректність формату дня народження
+        pass
+
+    def __iter__(self):
+        return self._record_iterator(n=2)
+
+    def _record_iterator(self, n):
+        current_index = 0
+        while current_index < len(self.records):
+            yield self.records[current_index:current_index + n]
+            current_index += n
+
+
+if __name__ == "__main__":
+    # Створення об'єктів Record
+    record1 = Record("John Doe", "123456789", datetime.date(1995, 5, 9))
+    record2 = Record("Jane Smieth", "85743632521", datetime.date(1999, 8, 20))
+    record3 = Record("Bobi Jonson", "556644555666")
+
+    # Створення об'єкту AddressBook
+    address_book = AddressBook()
+
+    # Додавання записів до AddressBook
+    address_book.add_record(record1)
+    address_book.add_record(record2)
+    address_book.add_record(record3)
+
+    # Перевірка кількості днів до наступного дня народження
+    print(record1.days_to_birthday())  
+    print(record2.days_to_birthday())  
+    print(record3.days_to_birthday())  
+
+    
